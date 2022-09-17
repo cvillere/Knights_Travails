@@ -20,6 +20,17 @@ class GameBoard
     end
   end
 
+  def find_final_position(init_pos, move_amt)
+    pt = 1
+    final_pos = []
+    final_pos[0] = init_pos[0] + move_amt[0]
+    final_pos[1] = init_pos[1] + move_amt[1]
+    if final_pos[0].between?(0, 7) & final_pos[1].between?(0, 7)
+      # create node relationship here
+      # create node for final position
+    end
+  end
+
 end
 
 
