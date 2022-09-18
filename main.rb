@@ -21,7 +21,6 @@ class GameBoard
   end
 
   def find_final_position(init_pos, move_amt)
-    pt = 1
     final_pos = []
     final_pos[0] = init_pos[0] + move_amt[0]
     final_pos[1] = init_pos[1] + move_amt[1]
@@ -29,6 +28,21 @@ class GameBoard
       # create node relationship here
       # create node for final position
     end
+  end
+end
+
+# class that will make nodes of the graph
+class GraphNode
+
+  attr_accessor :value, :adjacent_nodes
+
+  def initialize(value)
+    @value = value
+    @adjacent_nodes = []
+  end
+
+  def add_edge(adjacent_node)
+    @adjacent_nodes << adjacent_node
   end
 
 end
@@ -42,15 +56,15 @@ end
 # Graph node of the graph
 class GraphNode
 
-  attr_accessor :value, :neighbors
+  attr_accessor :value, :adjacent_nodes
 
   def initialize(value)
     @value = value
-    @neighbors = []
+    @adjacent_nodes = []
   end
 
-  def add_edge(neighbor)
-    @neighbors << neighbor
+  def add_edge(adjacent_node)
+    @adjacent_nodes << adjacent_node
   end
 
 end
