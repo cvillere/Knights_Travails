@@ -29,6 +29,9 @@ class GameBoard
       # create node for final position
     end
   end
+
+  
+
 end
 
 # class that will make nodes of the graph
@@ -43,6 +46,23 @@ class GraphNode
 
   def add_edge(adjacent_node)
     @adjacent_nodes << adjacent_node
+  end
+end
+
+# Class created for making undirected graph
+class Graph
+
+  def initialize
+    @nodes = {}
+  end
+
+  def add_node(node)
+    @nodes[node.value] = node
+  end
+
+  def add_edges(node1, node2)
+    @nodes[node1].add_edge(@nodes[node2])
+    @nodes[node2].add_edge(@nodes[node1])
   end
 
 end
@@ -81,9 +101,6 @@ class Graph
   def add_node(value)
     @nodes << GraphNode.new(value)
   end
-
-  
-
 end
 
 =end
