@@ -14,12 +14,11 @@ class GameBoard
   end
 
   def find_move_position
-    # serve up each position on the board (loop)
     board.each_with_index do |row, row_index|
       row.each_with_index do |column, col_index|
         Constants::KNIGHT_MOVES.each do |km|
-          # create node with [row_index, col_index]
           board_node = create_node([row_index, col_index])
+          @graph.add_edge(board_node)
           find_final_position([row_index, col_index], km, board_node)
         end
       end
