@@ -6,15 +6,17 @@ class GameBoard
   def initialize
     @board = Array.new(8) { Array.new(8)}
     @knight = knight
+    @graph = Graph.new
   end
 
+  KNIGHT_MOVES.freeze = [[2, -1], [2, 1], [1, -2], [1, 2], [1, -2], [-1, 2], [-2, -1], [-2, 1]]
+
   def find_move_position
-    knight_moves = [[2, -1], [2, 1], [1, -2], [1, 2], [1, -2], [-1, 2], [-2, -1], [-2, 1]]
     # serve up each position on the board (loop)
     board.each_with_index do |row, row_index|
       row.each_with_index do |column, col_index|
-        knight_moves.each do |km|
-          # create node with [row_index, col_index
+        KNIGHT_MOVES.each do |km|
+          # create node with [row_index, col_index]
           board_node = create_node([row_index, col_index])
           find_final_position([row_index, col_index], km, board_node)
         end
@@ -22,13 +24,14 @@ class GameBoard
     end
   end
 
-  def find_final_position(init_pos, move_amt)
+  def find_final_position(init_pos, move_amt, board_node)
     final_pos = []
     final_pos[0] = init_pos[0] + move_amt[0]
     final_pos[1] = init_pos[1] + move_amt[1]
     if final_pos[0].between?(0, 7) & final_pos[1].between?(0, 7)
-      # create node relationship here
-      # create node for final position
+      # create node for final position & create node relationship here
+      new_graph_node = create_node(final_pos)
+      @graph.add_edge(board_node, new_graph_node)
     end
   end
 
