@@ -1,3 +1,7 @@
+module Constants
+  KNIGHT_MOVES = [[2, -1], [2, 1], [1, -2], [1, 2], [1, -2], [-1, 2], [-2, -1], [-2, 1]]
+end
+
 # this is the class for making the gameboard, knight, and potential moves
 class GameBoard
 
@@ -9,13 +13,11 @@ class GameBoard
     @graph = Graph.new
   end
 
-  KNIGHT_MOVES.freeze = [[2, -1], [2, 1], [1, -2], [1, 2], [1, -2], [-1, 2], [-2, -1], [-2, 1]]
-
   def find_move_position
     # serve up each position on the board (loop)
     board.each_with_index do |row, row_index|
       row.each_with_index do |column, col_index|
-        KNIGHT_MOVES.each do |km|
+        Constants::KNIGHT_MOVES.each do |km|
           # create node with [row_index, col_index]
           board_node = create_node([row_index, col_index])
           find_final_position([row_index, col_index], km, board_node)
@@ -31,8 +33,9 @@ class GameBoard
     if final_pos[0].between?(0, 7) & final_pos[1].between?(0, 7)
       # create node for final position & create node relationship here
       new_graph_node = create_node(final_pos)
-      @graph.add_edge(board_node, new_graph_node)
+      @graph.add_edges(board_node, new_graph_node)
     end
+    @graph
   end
 
 =begin
@@ -57,7 +60,7 @@ class GraphNode
 
   attr_accessor :value, :adjacent_nodes
 
-  def initialize(value)
+  def initialize
     @value = value
     @adjacent_nodes = []
   end
@@ -82,51 +85,7 @@ class Graph
     @nodes[node1].add_edge(@nodes[node2])
     @nodes[node2].add_edge(@nodes[node1])
   end
-
 end
 
-
-
-
-=begin
-#Not ready to commit just yet
-
-# Graph node of the graph
-class GraphNode
-
-  attr_accessor :value, :adjacent_nodes
-
-  def initialize(value)
-    @value = value
-    @adjacent_nodes = []
-  end
-
-  def add_edge(adjacent_node)
-    @adjacent_nodes << adjacent_node
-  end
-
-end
-
-# class representing graph object
-class Graph
-
-  attr_accessor :nodes
-
-  def initialize
-    @nodes = []
-  end
-
-  def add_node(value)
-    @nodes << GraphNode.new(value)
-  end
-end
-
-def create_graph
-    Graph.new
-  end
-
-  def connect_nodes(first_pos, final_pos)
-  end
-
-=end
-
+initial_graph = GameBoard.new.find_move_position
+p initial_graph
