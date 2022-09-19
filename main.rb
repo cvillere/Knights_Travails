@@ -14,7 +14,9 @@ class GameBoard
     board.each_with_index do |row, row_index|
       row.each_with_index do |column, col_index|
         knight_moves.each do |km|
-          position_on_board([row_index, col_index], km)
+          # create node with [row_index, col_index
+          board_node = create_node([row_index, col_index])
+          find_final_position([row_index, col_index], km, board_node)
         end
       end
     end
@@ -30,7 +32,20 @@ class GameBoard
     end
   end
 
-  
+=begin
+  def create_graph
+    Graph.new
+  end
+
+  def connect_nodes(first_pos, final_pos)
+  end
+=end
+
+  def create_node(value)
+    board_node = GraphNode.new
+    board_node.value = value
+    board_node
+  end
 
 end
 
@@ -102,6 +117,13 @@ class Graph
     @nodes << GraphNode.new(value)
   end
 end
+
+def create_graph
+    Graph.new
+  end
+
+  def connect_nodes(first_pos, final_pos)
+  end
 
 =end
 
