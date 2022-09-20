@@ -16,13 +16,14 @@ class GameBoard
   def find_move_position
     board.each_with_index do |row, row_index|
       row.each_with_index do |column, col_index|
+        board_node = create_node([row_index, col_index])
+        @graph.add_node(board_node)
         Constants::KNIGHT_MOVES.each do |km|
-          board_node = create_node([row_index, col_index])
-          @graph.add_edge(board_node)
           find_final_position([row_index, col_index], km, board_node)
         end
       end
     end
+    p @graph
   end
 
   def find_final_position(init_pos, move_amt, board_node)
@@ -32,22 +33,13 @@ class GameBoard
     if final_pos[0].between?(0, 7) & final_pos[1].between?(0, 7)
       # create node for final position & create node relationship here
       new_graph_node = create_node(final_pos)
+      @graph.add_node(new_graph_node)
       @graph.add_edges(board_node, new_graph_node)
     end
-    @graph
   end
-
-=begin
-  def create_graph
-    Graph.new
-  end
-
-  def connect_nodes(first_pos, final_pos)
-  end
-=end
 
   def create_node(value)
-    board_node = GraphNode.new
+    board_node = Node.new
     board_node.value = value
     board_node
   end
@@ -55,7 +47,7 @@ class GameBoard
 end
 
 # class that will make nodes of the graph
-class GraphNode
+class Node
 
   attr_accessor :value, :adjacent_nodes
 
@@ -81,8 +73,8 @@ class Graph
   end
 
   def add_edges(node1, node2)
-    @nodes[node1].add_edge(@nodes[node2])
-    @nodes[node2].add_edge(@nodes[node1])
+    @nodes[node1.value].add_edge(@nodes[node2.value])
+    @nodes[node2.value].add_edge(@nodes[node1.value])
   end
 end
 
