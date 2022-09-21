@@ -1,3 +1,5 @@
+require 'pp'
+
 module Constants
   KNIGHT_MOVES = [[2, -1], [2, 1], [1, -2], [1, 2], [1, -2], [-1, 2], [-2, -1], [-2, 1]]
 end
@@ -23,7 +25,7 @@ class GameBoard
         end
       end
     end
-    p @graph
+    @graph
   end
 
   def find_final_position(init_pos, move_amt, board_node)
@@ -79,4 +81,6 @@ class Graph
 end
 
 initial_graph = GameBoard.new.find_move_position
-p initial_graph
+p initial_graph.inspect
+
+
