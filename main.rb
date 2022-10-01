@@ -1,5 +1,3 @@
-require 'pp'
-
 module Constants
   KNIGHT_MOVES = [[2, -1], [2, 1], [1, -2], [1, 2], [1, -2], [-1, 2], [-2, -1], [-2, 1]]
 end
@@ -7,7 +5,7 @@ end
 # this is the class for making the gameboard, knight, and potential moves
 class GameBoard
 
-  attr_accessor :board, :knight
+  attr_accessor :board, :knight, :graph
 
   def initialize
     @board = Array.new(8) { Array.new(8)}
@@ -17,7 +15,7 @@ class GameBoard
 
   def find_move_position
     board.each_with_index do |row, row_index|
-      row.each_with_index do |column, col_index|
+      row.each_with_index do |_column, col_index|
         board_node = create_node([row_index, col_index])
         @graph.add_node(board_node)
         Constants::KNIGHT_MOVES.each do |km|
@@ -51,11 +49,13 @@ end
 # class that will make nodes of the graph
 class Node
 
-  attr_accessor :value, :adjacent_nodes
+  attr_accessor :value, :adjacent_nodes, :predecessor, :distance
 
   def initialize
     @value = value
     @adjacent_nodes = []
+    @predecessor = nil
+    @distance = nil
   end
 
   def add_edge(adjacent_node)
@@ -81,6 +81,6 @@ class Graph
 end
 
 initial_graph = GameBoard.new.find_move_position
-p initial_graph.inspect
+p initial_graph
 
 
