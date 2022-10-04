@@ -2,6 +2,46 @@ module Constants
   KNIGHT_MOVES = [[2, -1], [2, 1], [1, -2], [1, 2], [1, -2], [-1, 2], [-2, -1], [-2, 1]]
 end
 
+# BFS function and function to find shortest path
+module SearchFunctions
+
+  def find_knight_path(start_pos, end_pos)
+    queue = Queue.new
+    final_path = []
+    distance = 0
+    predecessor = nil
+    start_pos.distance = 0
+    start_pos.predecessor = nil
+    queue.enqueue(start_pos)
+    final_path.push(start_pos)
+
+    until queue.isEmpty? || final_path.contains?(end_pos) do
+      current_item = queue.dequeue
+      distance += distance
+      predecessor = current_item
+      current_item.adjacency_list.each do |i|
+        i.distance = distance
+        i.predecessor = predecessor
+        queue.enqueue(i) unless queue.include?(i)
+      end
+      final_path.push(current_item) unless final_path.include?(current_item)
+    end
+    final_path.reverse
+  end
+
+  def find_shortest_path(final_path)
+    final_shortest_path = []
+    current_item = final_path[0]
+    loop_var = false
+    until loop_var do
+      final_shortest_path.push(current_item)
+      current_item = current_item.predecessor(nil)
+      loop_var = true if current_item == nil
+    end
+    final_shortest_path.reverse
+  end
+end
+
 # this is the class for making the gameboard, knight, and potential moves
 class GameBoard
 
@@ -82,5 +122,8 @@ end
 
 initial_graph = GameBoard.new.find_move_position
 p initial_graph
+
+
+
 
 
