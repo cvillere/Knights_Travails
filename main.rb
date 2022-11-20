@@ -1,81 +1,56 @@
-module Constants
-  KNIGHT_MOVES = [[2, -1], [2, 1], [1, -2], [1, 2], [1, -2], [-1, 2], [-2, -1], [-2, 1]]
-end
-
-# BFS function and function to find shortest path
-module SearchFunctions
-
-  def find_knight_path(start_pos, end_pos)
-    queue = Queue.new
-    final_path = []
-    distance = 0
-    predecessor = nil
-    start_pos.distance = 0
-    start_pos.predecessor = nil
-    queue.enqueue(start_pos)
-    final_path.push(start_pos)
-
-    until queue.isEmpty? || final_path.contains?(end_pos) do
-      current_item = queue.dequeue
-      distance += distance
-      predecessor = current_item
-      current_item.adjacency_list.each do |i|
-        i.distance = distance
-        i.predecessor = predecessor
-        queue.enqueue(i) unless queue.include?(i)
-      end
-      final_path.push(current_item) unless final_path.include?(current_item)
-    end
-    final_path.reverse
-  end
-
-  def find_shortest_path(final_path)
-    final_shortest_path = []
-    current_item = final_path[0]
-    loop_var = false
-    until loop_var do
-      final_shortest_path.push(current_item)
-      current_item = current_item.predecessor(nil)
-      loop_var = true if current_item == nil
-    end
-    final_shortest_path.reverse
-  end
-end
+require_relative('/Users/christianvillere/the_odin_project/Ruby/Knight/constants.rb')
+require_relative('/Users/christianvillere/the_odin_project/Ruby/Knight/search_functions.rb')
+require_relative('/Users/christianvillere/the_odin_project/Ruby/Knight/graph_class.rb')
 
 # this is the class for making the gameboard, knight, and potential moves
 class GameBoard
-
+  include SearchFunctions
+  include Constants
   attr_accessor :board, :knight, :graph
 
   def initialize
-    @board = Array.new(8) { Array.new(8)}
+    @board = Array.new(8) { Array.new(8) }
     @knight = knight
     @graph = Graph.new
   end
 
-  def find_move_position
-    board.each_with_index do |row, row_index|
+  def create_graph
+    @board.each_with_index do |row, row_index|
       row.each_with_index do |_column, col_index|
         board_node = create_node([row_index, col_index])
         @graph.add_node(board_node)
-        Constants::KNIGHT_MOVES.each do |km|
-          find_final_position([row_index, col_index], km, board_node)
-        end
       end
     end
-    @graph
+    @graph 
   end
 
-  def find_final_position(init_pos, move_amt, board_node)
+  def determine_move_val(node1, node2)
     final_pos = []
-    final_pos[0] = init_pos[0] + move_amt[0]
-    final_pos[1] = init_pos[1] + move_amt[1]
-    if final_pos[0].between?(0, 7) & final_pos[1].between?(0, 7)
-      # create node for final position & create node relationship here
-      new_graph_node = create_node(final_pos)
-      @graph.add_node(new_graph_node)
-      @graph.add_edges(board_node, new_graph_node)
-    end
+    final_pos[0] = node1[0] + node2[0]
+    final_pos[1] = node2[1] + node2[1]
+    final_pos
+  end
+
+  def run_game(initial_object)
+    puts Constants::BOARD
+    start_pos = find_start_pos
+    end_pos = find_end_pos
+    check_inputs = check_inputs(start_pos, end_pos)
+    my_graph = initial_object.create_graph
+    final_graph = my_graph.add_adjacencies(my_graph)
+    knight_path = final_graph.find_knight_path(final_graph, check_inputs[0], check_inputs[1])
+    puts '--------------------'
+    p knight_path
+    play_again
+  end
+
+  def play_again
+    puts '--------------------'
+    puts 'Play again? Type 1 for yes'
+    player_rep = gets.chomp
+    return if player_rep != "1" 
+    new_board = GameBoard.new
+    run_game(new_board)
   end
 
   def create_node(value)
@@ -83,12 +58,10 @@ class GameBoard
     board_node.value = value
     board_node
   end
-
 end
 
 # class that will make nodes of the graph
 class Node
-
   attr_accessor :value, :adjacent_nodes, :predecessor, :distance
 
   def initialize
@@ -103,27 +76,7 @@ class Node
   end
 end
 
-# Class created for making undirected graph
-class Graph
-
-  def initialize
-    @nodes = {}
-  end
-
-  def add_node(node)
-    @nodes[node.value] = node
-  end
-
-  def add_edges(node1, node2)
-    @nodes[node1.value].add_edge(@nodes[node2.value])
-    @nodes[node2.value].add_edge(@nodes[node1.value])
-  end
-end
-
-initial_graph = GameBoard.new.find_move_position
-p initial_graph
-
-
-
+my_object = GameBoard.new
+my_object.run_game(my_object)
 
 
